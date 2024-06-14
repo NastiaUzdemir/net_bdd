@@ -1,5 +1,6 @@
 package ru.netology.test;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
@@ -43,7 +44,13 @@ public class MoneyTransferTest {
         var transferPage = dashboardPage.selectCardToTransfer(secondCardInfo);
         dashboardPage = transferPage.makeValidTransfer(String.valueOf(amount),firstCardInfo);
         dashboardPage.reloadDashboardPage();
+
+        var newBalanceOfFirstCard = dashboardPage.getCardBalance(0);
+        var newBalanceOfSecondCard = dashboardPage.getCardBalance(1);
+        Assertions.assertAll(() -> assertEquals(expectedBalanceFirstCard, newBalanceOfFirstCard),
+                () -> assertEquals(expectedBalanceSecondCard, newBalanceOfSecondCard));
     }
+
 
     @Test
     void shouldGetErrorMessageIfAmountMoreBalance() {
